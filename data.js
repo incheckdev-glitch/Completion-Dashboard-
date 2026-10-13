@@ -1,0 +1,7 @@
+/* All information below is fictional DEMO DATA. Edit brands, locations or templates freely. */
+const DEMO_BRANDS = [{name:'Urban Table',locations:['Downtown','Marina','Business Bay']},{name:'Fresh Kitchen',locations:['JLT','Motor City','Al Quoz']},{name:'Cafe District',locations:['Jumeirah','City Walk','DIFC']},{name:'The Kitchen Co.',locations:['Palm Jumeirah','Deira','Barsha']}];
+const DEMO_CHECKLISTS=['Opening Checklist','Closing Checklist','Food Safety Inspection','Equipment Cleaning','Chiller Temperature','Daily Hygiene Audit','Shift Handover','Receiving & Storage'];
+/* Seeded pseudo-random generator makes dashboard values stable on every reload. */
+function seededRandom(seed){return function(){seed=(Math.imul(1664525,seed)+1013904223)>>>0;return seed/4294967296}}
+const rnd=seededRandom(3602026), today=new Date();today.setHours(12,0,0,0);
+const DEMO_RECORDS=Array.from({length:640},(_,i)=>{const b=DEMO_BRANDS[Math.floor(rnd()*DEMO_BRANDS.length)],location=b.locations[Math.floor(rnd()*b.locations.length)],checklist=DEMO_CHECKLISTS[Math.floor(rnd()*DEMO_CHECKLISTS.length)],daysAgo=Math.floor(rnd()*90),date=new Date(today);date.setDate(date.getDate()-daysAgo);const x=rnd(),status=x<.79?'On Time':x<.89?'Late':x<.95?'Partial':'Missed',total=10+Math.floor(rnd()*17),done=status==='Missed'?0:status==='Partial'?Math.floor(total*(.45+.4*rnd())):total;return {id:i+1,date:date.toISOString().slice(0,10),brand:b.name,location,checklist,status,done,total,rate:Math.round(100*done/total)};});
